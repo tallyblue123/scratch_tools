@@ -85,6 +85,9 @@ async function generatePassword(options = {}) {
         throw new Error('After filtering blacklist, there are no special characters available. Please adjust customSymbols.');
     }
 
+    // Build full charset for positions that don't map to specific datasets
+    const fullCharset = uppercase + lowercase + digits + symbols;
+
     // Derive key using PBKDF2
     const derivedKey = crypto.pbkdf2Sync(
         masterPassword,
@@ -157,8 +160,8 @@ async function generatePassword(options = {}) {
 
         password = '';
         for (let i = 0; i < length; i++) {
-            const index = keyBuffer[i] % charset.length;
-            password += charset[index];
+            const index = keyBuffer[i] % fullCharset.length;
+            password += fullCharset[index];
         }
     }
 
