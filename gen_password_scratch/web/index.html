@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Vault Architect - Local Deterministic Password Generator</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary-fixed-variant": "#00513c",
+            "on-surface-variant": "#c4c6cc",
+            "on-background": "#e3e2e8",
+            "tertiary-fixed-dim": "#afc9ea",
+            "secondary-container": "#3e4960",
+            "surface-container-lowest": "#0d0e12",
+            "surface-container": "#1f1f24",
+            "on-primary": "#003828",
+            "inverse-surface": "#e3e2e8",
+            "surface": "#121317",
+            "primary-fixed-dim": "#00e1ab",
+            "primary-fixed": "#36ffc4",
+            "surface-container-high": "#292a2e",
+            "secondary": "#bbc6e2",
+            "primary-container": "#001f15",
+            "on-tertiary-fixed-variant": "#2f4865",
+            "on-primary-container": "#009570",
+            "tertiary-container": "#001b33",
+            "surface-bright": "#38393e",
+            "surface-dim": "#121317",
+            "on-secondary-container": "#adb8d3",
+            "on-tertiary-fixed": "#001d36",
+            "outline-variant": "#44474c",
+            "surface-tint": "#00e1ab",
+            "on-primary-fixed": "#002116",
+            "outline": "#8e9196",
+            "on-surface": "#e3e2e8",
+            "secondary-fixed-dim": "#bbc6e2",
+            "on-tertiary": "#17324d",
+            "on-error": "#690005",
+            "inverse-primary": "#006c50",
+            "on-error-container": "#ffdad6",
+            "surface-container-highest": "#343439",
+            "error-container": "#93000a",
+            "on-secondary-fixed-variant": "#3c475d",
+            "background": "#121317",
+            "surface-container-low": "#1a1b20",
+            "secondary-fixed": "#d7e2ff",
+            "tertiary": "#afc9ea",
+            "surface-variant": "#343439",
+            "inverse-on-surface": "#2f3035",
+            "on-secondary": "#263046",
+            "tertiary-fixed": "#d1e4ff",
+            "on-secondary-fixed": "#101b30",
+            "primary": "#00e1ab",
+            "on-tertiary-container": "#6b85a4",
+            "error": "#ffb4ab"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Manrope"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .grid-overlay {
+      background-image: radial-gradient(circle at 1px 1px, rgba(0, 225, 171, 0.05) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .glass-panel {
+      backdrop-filter: blur(20px);
+      background: rgba(41, 42, 46, 0.7);
+    }
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #00e1ab;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 225, 171, 0.4);
+    }
+    input[type='range']::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #00e1ab;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0 0 10px rgba(0, 225, 171, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+  <!-- TopAppBar -->
+  <header class="fixed top-0 w-full z-50 bg-[#121317] dark:bg-[#121317]">
+    <div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+      <div class="text-xl font-bold tracking-tight text-slate-100 dark:text-slate-100 font-headline">
+        The Vault Architect
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container border border-primary/10">
+          <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">shield</span>
+          <span class="text-[10px] font-medium font-label uppercase tracking-widest text-primary">Privacy First</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="min-h-screen pt-24 pb-32 relative overflow-hidden flex items-center justify-center">
+    <!-- Background Grid Pattern -->
+    <div class="absolute inset-0 grid-overlay -z-10 pointer-events-none"></div>
+    <!-- Decoration Gradients -->
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="max-w-xl w-full px-6 flex flex-col items-center">
+      <!-- Header Section -->
+      <div class="text-center mb-10">
+        <h1 class="font-headline text-4xl md:text-5xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-b from-on-surface to-on-surface-variant">
+          Vault Architect
+        </h1>
+        <p class="font-label text-sm text-outline tracking-wider uppercase">Local Deterministic Password Generator</p>
+      </div>
+      <!-- Main Generator Card -->
+      <div class="w-full glass-panel rounded-xl p-8 md:p-10 border border-outline-variant/15 shadow-2xl relative">
+        <!-- Status Badge -->
+        <div class="absolute -top-3 right-8 px-3 py-1 bg-surface-container-high border border-outline-variant/20 rounded-full flex items-center gap-2">
+          <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+          <span class="font-label text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">System Offline & Secure</span>
+        </div>
+        <!-- Input Groups -->
+        <div class="space-y-8">
+          <!-- Input 1: Your Token -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Your Token</label>
+              <span class="material-symbols-outlined text-outline text-sm">lock</span>
+            </div>
+            <div class="relative group">
+              <input
+                id="masterPassword"
+                class="w-full bg-surface-container-lowest border-none rounded-lg p-4 font-headline text-lg focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-outline-variant"
+                placeholder="Enter your master token" type="text" />
+              <div class="absolute inset-0 rounded-lg pointer-events-none border border-primary/0 group-focus-within:border-primary/20 transition-all"></div>
+            </div>
+          </div>
+          <!-- Input 2: Site Name (Salt) -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Site Name (Salt)</label>
+              <span class="material-symbols-outlined text-outline text-sm">language</span>
+            </div>
+            <div class="relative group">
+              <input
+                id="siteName"
+                class="w-full bg-surface-container-lowest border-none rounded-lg p-4 font-body text-base focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-outline-variant"
+                placeholder="example.com" type="text" />
+            </div>
+          </div>
+          <!-- Input: Password Length -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <label class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Password Length</label>
+                <span class="text-primary font-headline font-bold text-sm bg-primary/10 px-2 py-0.5 rounded" id="length-value">8</span>
+              </div>
+              <span class="material-symbols-outlined text-outline text-sm">straighten</span>
+            </div>
+            <div class="relative flex items-center h-12 bg-surface-container-lowest rounded-lg px-4">
+              <input
+                id="lengthSlider"
+                class="w-full h-1.5 bg-surface-variant rounded-lg appearance-none cursor-pointer accent-primary focus:outline-none"
+                max="24" min="8" oninput="document.getElementById('length-value').innerText = this.value" type="range" value="8" />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">Custom Special Characters</label>
+              <span class="material-symbols-outlined text-outline text-sm">data_object</span>
+            </div>
+            <div class="relative group">
+              <input
+                id="customSymbols"
+                class="w-full bg-surface-container-lowest border-none rounded-lg p-4 font-headline tracking-[0.5em] text-primary-fixed-dim focus:ring-1 focus:ring-primary/40 transition-all"
+                type="text" placeholder="" />
+              <div class="absolute inset-0 rounded-lg pointer-events-none border border-primary/0 group-focus-within:border-primary/20 transition-all"></div>
+            </div>
+            <p class="text-[10px] text-on-surface-variant font-medium">
+              Default: @#^!? (leave empty to use defaults)
+            </p>
+          </div>
+          <!-- Action Button -->
+          <div class="pt-4">
+            <button
+              id="generateBtn"
+              class="w-full py-4 bg-gradient-to-br from-primary to-on-primary-container text-on-primary font-headline font-bold text-lg rounded-lg shadow-[0_0_20px_rgba(0,225,171,0.2)] hover:shadow-[0_0_30px_rgba(0,225,171,0.4)] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+              <span class="material-symbols-outlined">key</span>
+              Generate Secure Password
+            </button>
+          </div>
+          <!-- Local Notice -->
+          <div class="flex items-center justify-center gap-3 px-4 py-3 bg-surface-container-low/50 rounded-lg border border-primary/5">
+            <span class="material-symbols-outlined text-primary text-lg">memory</span>
+            <p class="font-label text-[11px] text-on-surface-variant font-medium uppercase tracking-tight">Purely Local Calculation. No data ever leaves your device.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Result Section -->
+      <div class="w-full mt-10 space-y-4">
+        <div class="bg-surface-container-high rounded-xl p-6 border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
+          <div class="flex-1 w-full text-center md:text-left">
+            <p class="font-label text-[10px] uppercase tracking-widest text-outline mb-1">Architectural Output</p>
+            <div id="password-output" class="font-headline text-2xl md:text-3xl font-bold tracking-widest text-primary break-all">
+              Click to generate...
+            </div>
+          </div>
+          <button id="copyBtn" class="flex items-center gap-2 px-6 py-3 bg-surface-container-highest hover:bg-surface-bright text-on-surface font-label font-bold text-xs uppercase tracking-widest rounded-lg transition-colors border border-outline-variant/20">
+            <span class="material-symbols-outlined text-base">content_copy</span>
+            Copy
+          </button>
+        </div>
+        <!-- Strength Indicator -->
+        <div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+          <div id="strength-bar" class="h-full w-0 bg-gradient-to-r from-secondary to-primary shadow-[0_0_10px_rgba(0,225,171,0.5)] transition-all duration-500"></div>
+        </div>
+        <div class="flex justify-between font-label text-[10px] text-outline uppercase tracking-widest">
+          <span>Entropy Level</span>
+          <span id="strength-level" class="text-on-surface-variant font-bold">--</span>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Footer -->
+  <footer class="w-full py-12 border-t border-[#00e1ab]/15 bg-[#121317] dark:bg-[#121317]">
+    <div class="flex flex-col items-center gap-4 px-8 text-center">
+      <div class="max-w-xl text-[10px] font-medium Inter uppercase tracking-widest text-slate-500 leading-relaxed">
+        © 2024 Vault Architect by bigfacekitty. All calculations are performed locally via client-side entropy. No data ever leaves your device.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Default constants
+    const DEFAULT_SPECIAL_CHARS = '@#^!?';
+    const DEFAULT_BLACKLIST = [' '];
+    const DEFAULT_ITERATIONS = 100000;
+
+    // Merge two strings and remove duplicate characters
+    function mergeAndDeduplicate(customSymbols, defaultSymbols) {
+      if (!customSymbols) {
+        return defaultSymbols;
+      }
+      const combined = customSymbols + defaultSymbols;
+      const uniqueChars = [...new Set(combined.split(''))];
+      return uniqueChars.join('');
+    }
+
+    // Filter blacklisted characters from a string
+    function filterBlacklist(str, blacklist) {
+      return str.split('').filter(char => {
+        return !blacklist.some(pattern => {
+          if (typeof pattern === 'string') {
+            return char === pattern;
+          }
+          if (pattern instanceof RegExp) {
+            return pattern.test(char);
+          }
+          return false;
+        });
+      }).join('');
+    }
+
+    // Escape special regex characters
+    function escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Ensure password meets character type criteria (deterministic)
+    function ensureCriteria(password, keyBuffer, uppercase, lowercase, digits, symbols) {
+      let hasUppercase = /[A-Z]/.test(password);
+      let hasLowercase = /[a-z]/.test(password);
+      let hasDigit = /[0-9]/.test(password);
+
+      const symbolPattern = new RegExp(`[${escapeRegex(symbols)}]`, 'g');
+      let actualSymbolCount = (password.match(symbolPattern) || []).length;
+
+      let result = password.split('');
+      let indices = Array.from({ length: result.length }, (_, i) => i);
+
+      // Deterministic shuffle using keyBuffer
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = keyBuffer[i] % (i + 1);
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+
+      let usedIndices = new Set();
+      let bufferIndex = 0;
+
+      const getNextRandom = (max) => {
+        const value = keyBuffer[bufferIndex % keyBuffer.length];
+        bufferIndex++;
+        return value % max;
+      };
+
+      // Ensure at least 1 uppercase
+      if (!hasUppercase) {
+        for (const idx of indices) {
+          if (!usedIndices.has(idx)) {
+            result[idx] = uppercase[getNextRandom(uppercase.length)];
+            usedIndices.add(idx);
+            hasUppercase = true;
+            break;
+          }
+        }
+      }
+
+      // Ensure at least 1 lowercase
+      if (!hasLowercase) {
+        for (const idx of indices) {
+          if (!usedIndices.has(idx)) {
+            result[idx] = lowercase[getNextRandom(lowercase.length)];
+            usedIndices.add(idx);
+            hasLowercase = true;
+            break;
+          }
+        }
+      }
+
+      // Ensure at least 1 digit
+      if (!hasDigit) {
+        for (const idx of indices) {
+          if (!usedIndices.has(idx)) {
+            result[idx] = digits[getNextRandom(digits.length)];
+            usedIndices.add(idx);
+            hasDigit = true;
+            break;
+          }
+        }
+      }
+
+      // Ensure at least 1 symbol
+      actualSymbolCount = (result.join('').match(symbolPattern) || []).length;
+      if (actualSymbolCount < 1) {
+        for (const idx of indices) {
+          if (!usedIndices.has(idx)) {
+            result[idx] = symbols[getNextRandom(symbols.length)];
+            usedIndices.add(idx);
+            actualSymbolCount = (result.join('').match(symbolPattern) || []).length;
+            if (actualSymbolCount >= 1) {
+              break;
+            }
+          }
+        }
+      }
+
+      return result.join('');
+    }
+
+    // Main password generation function
+    async function generatePassword() {
+      const masterPassword = document.getElementById('masterPassword').value.trim();
+      const salt = document.getElementById('siteName').value.trim();
+      const length = parseInt(document.getElementById('length-value').textContent);
+      const customSymbols = document.getElementById('customSymbols').value.trim();
+
+      // Validation
+      if (!masterPassword || !salt) {
+        alert('Please enter both your token and site name!');
+        return;
+      }
+
+      if (length < 8 || length > 128) {
+        alert('Password length must be between 8 and 128!');
+        return;
+      }
+
+      try {
+        // Build 4 separate character sets
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const digits = '0123456789';
+
+        // Merge customSymbols with default symbols and remove duplicates
+        const mergedSymbols = mergeAndDeduplicate(customSymbols, DEFAULT_SPECIAL_CHARS);
+
+        // Filter symbols based on blacklist
+        const blacklist = DEFAULT_BLACKLIST;
+        const symbols = filterBlacklist(mergedSymbols, blacklist);
+
+        if (symbols.length < 1) {
+          alert('No special characters available after filtering. Please adjust customSymbols.');
+          return;
+        }
+
+        // Define 4 datasets
+        const datasets = [uppercase, lowercase, digits, symbols];
+
+        // Full charset for non-fixed positions
+        const fullCharset = uppercase + lowercase + digits + symbols;
+
+        // Generate salt
+        const encoder = new TextEncoder();
+        const saltBytes = encoder.encode(salt);
+        const saltHash = await crypto.subtle.digest('SHA-256', saltBytes);
+        const saltBuffer = new Uint8Array(saltHash);
+
+        // Derive key using PBKDF2
+        const keyMaterial = await crypto.subtle.importKey(
+          'raw',
+          encoder.encode(masterPassword),
+          'PBKDF2',
+          false,
+          ['deriveBits']
+        );
+
+        const derivedBits = await crypto.subtle.deriveBits(
+          {
+            name: 'PBKDF2',
+            salt: saltBuffer,
+            iterations: DEFAULT_ITERATIONS,
+            hash: 'SHA-256'
+          },
+          keyMaterial,
+          length * 16
+        );
+
+        // Convert derived bits to password using dynamic position mapping
+        const derivedArray = new Uint8Array(derivedBits);
+        let password = '';
+        let keyBuffer = derivedArray;
+        let bufferIndex = 0;
+
+        // Use first character to determine which 4 positions map to which dataset
+        // This makes the position mapping unpredictable
+        const firstCharValue = keyBuffer[0];
+
+        // Generate 4 unique positions in range [0, length-1]
+        const selectedPositions = [];
+        const availablePositions = Array.from({ length }, (_, i) => i);
+
+        // Select 4 unique positions using firstCharValue
+        for (let i = 0; i < 4; i++) {
+          const idx = (firstCharValue + i * 7) % availablePositions.length;
+          selectedPositions.push(availablePositions[idx]);
+          availablePositions.splice(idx, 1);
+        }
+
+        // Map datasets to selected positions
+        const positionMapping = {
+          [selectedPositions[0]]: uppercase,
+          [selectedPositions[1]]: lowercase,
+          [selectedPositions[2]]: digits,
+          [selectedPositions[3]]: symbols
+        };
+
+        bufferIndex = 1; // Start from index 1 since index 0 was used for position calculation
+
+        for (let i = 0; i < length; i++) {
+          let char = '';
+
+          if (selectedPositions.includes(i)) {
+            // This position is one of the 4 mapped positions
+            const dataset = positionMapping[i];
+            const charIndex = keyBuffer[bufferIndex % keyBuffer.length] % dataset.length;
+            char = dataset[charIndex];
+          } else {
+            // Other positions: use full charset for maximum entropy
+            const charIndex = keyBuffer[bufferIndex % keyBuffer.length] % fullCharset.length;
+            char = fullCharset[charIndex];
+          }
+
+          password += char;
+          bufferIndex++;
+        }
+
+        // Ensure password meets criteria (deterministic)
+        password = ensureCriteria(password, keyBuffer, uppercase, lowercase, digits, symbols);
+
+        // Display result
+        document.getElementById('password-output').textContent = password;
+        updateStrengthIndicator(password);
+
+      } catch (error) {
+        console.error('Error generating password:', error);
+        alert('Error generating password. Please try again.');
+      }
+    }
+
+    // Update strength indicator
+    function updateStrengthIndicator(password) {
+      const hasUppercase = /[A-Z]/.test(password);
+      const hasLowercase = /[a-z]/.test(password);
+      const hasDigit = /[0-9]/.test(password);
+      const symbolCount = (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?@#^!?]/g) || []).length;
+
+      const score = [hasUppercase, hasLowercase, hasDigit, symbolCount >= 1].filter(Boolean).length;
+      
+      let percentage, level, color;
+      if (score === 4) {
+        percentage = '85%';
+        level = 'Impenetrable';
+        color = 'from-error via-secondary to-primary';
+      } else if (score === 3) {
+        percentage = '60%';
+        level = 'Strong';
+        color = 'from-primary to-secondary';
+      } else if (score === 2) {
+        percentage = '40%';
+        level = 'Moderate';
+        color = 'from-secondary to-tertiary';
+      } else {
+        percentage = '20%';
+        level = 'Weak';
+        color = 'from-tertiary to-error';
+      }
+
+      const strengthBar = document.getElementById('strength-bar');
+      const strengthLevel = document.getElementById('strength-level');
+      
+      if (strengthBar) {
+        strengthBar.style.width = percentage;
+        strengthBar.className = `h-full bg-gradient-to-r ${color} shadow-[0_0_10px_rgba(0,225,171,0.5)] transition-all duration-500`;
+      }
+      
+      if (strengthLevel) {
+        strengthLevel.textContent = level;
+      }
+    }
+
+    // Copy password to clipboard
+    function copyPassword() {
+      const password = document.getElementById('password-output').textContent;
+      
+      if (!password || password === 'Click to generate...') {
+        alert('Please generate a password first!');
+        return;
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(password).then(() => {
+          alert('Password copied to clipboard!');
+        }).catch(err => {
+          fallbackCopy(password);
+        });
+      } else {
+        fallbackCopy(password);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        alert('Password copied to clipboard!');
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+        alert('Failed to copy password. Please select and copy manually.');
+      }
+      
+      document.body.removeChild(textArea);
+    }
+
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add event listeners
+      document.getElementById('generateBtn').addEventListener('click', generatePassword);
+      document.getElementById('copyBtn').addEventListener('click', copyPassword);
+
+      // Allow Enter key to generate password
+      document.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          generatePassword();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
