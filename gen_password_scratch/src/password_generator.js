@@ -145,29 +145,6 @@ async function generatePassword(options = {}) {
         bufferIndex++;
     }
 
-    // Check blacklist (pattern-based blacklist like common words)
-    if (isInBlacklist(password, fullBlacklist)) {
-        // If password contains blacklisted pattern, regenerate with modified salt
-        const modifiedSalt = Buffer.concat([salt, Buffer.from('_retry')]);
-
-        keyBuffer = crypto.pbkdf2Sync(
-            masterPassword,
-            modifiedSalt,
-            iterations,
-            length * 2,
-            'sha256'
-        );
-
-        password = '';
-        for (let i = 0; i < length; i++) {
-            const index = keyBuffer[i] % fullCharset.length;
-            password += fullCharset[index];
-        }
-    }
-
-    // Ensure password meets all criteria (deterministic)
-    password = ensureCriteria(password, keyBuffer, uppercase, lowercase, digits, symbols);
-
     return password;
 }
 
@@ -381,6 +358,5 @@ module.exports = {
     ensureCriteria,
     escapeRegex,
     mergeAndDeduplicate,
-    filterBlacklist,
-    isInBlacklist
+    filterBlacklist
 };

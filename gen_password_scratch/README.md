@@ -25,13 +25,7 @@ flowchart TD
     F --> G[使用密钥首字节动态选择4个位置]
     G --> H[映射4个位置到4个字符子集]
     H --> I[生成密码<br/>映射位置使用对应子集<br/>其他位置使用fullCharset]
-    I --> J{检查是否命中黑名单模式}
-    J -->|命中| K[使用修改后的盐值重新生成]
-    J -->|未命中| L{检查密码复杂度要求}
-    K --> L
-    L -->|不满足| M[确定性替换字符以满足要求]
-    L -->|满足| N[输出密码]
-    M --> N
+    I --> J[输出密码]
 ```
 
 ### 密码要求
@@ -80,7 +74,7 @@ positionMapping[selectedPositions[3]] = symbols
 
 **优势：**
 - ✅ 4个关键字符的位置无法预测
-- ✅ 每种类型至少1个字符（由 `ensureCriteria` 保证）
+- ✅ 每种类型至少1个字符（由位置映射保证）
 - ✅ 其他位置使用全集，最大化熵值
 - ✅ 完全确定性，相同输入产生相同输出
 - ✅ 比固定位置映射更安全
@@ -171,26 +165,7 @@ for (let i = 0; i < length; i++) {
 }
 ```
 
-#### 4. 确定性字符替换（备用）
-
-如果动态映射生成的密码仍不符合要求，会进行确定性替换：
-
-```javascript
-// 使用 keyBuffer 作为"随机"源，而非 Math.random()
-const getNextRandom = (max) => {
-    const value = keyBuffer[bufferIndex % keyBuffer.length];
-    bufferIndex++;
-    return value % max;
-};
-
-// 确定性索引排序（Fisher-Yates shuffle）
-for (let i = indices.length - 1; i > 0; i--) {
-    const j = keyBuffer[i] % (i + 1);
-    [indices[i], indices[j]] = [indices[j], indices[i]];
-}
-```
-
-**注意：** 动态位置映射通常能满足要求，此机制主要用于确保极端情况下的合规性。
+#### 4. 确定性保证
 
 **确定性保证：**
 - 不使用 `Math.random()` 或其他非确定性随机数
