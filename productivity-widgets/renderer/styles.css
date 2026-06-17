@@ -1,0 +1,573 @@
+:root {
+  color-scheme: dark;
+  --text: rgba(255, 255, 255, 0.94);
+  --muted: rgba(255, 255, 255, 0.66);
+  --faint: rgba(255, 255, 255, 0.34);
+  --line: rgba(255, 255, 255, 0.22);
+  --glass: rgba(22, 34, 46, 0.44);
+  --shadow: 0 28px 90px rgba(0, 12, 32, 0.42);
+  font-family: "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 960px;
+  min-height: 620px;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+  color: var(--text);
+}
+
+body {
+  letter-spacing: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 140ms ease;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  padding: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 74% 8%, rgba(12, 146, 226, 0.58), transparent 30%),
+    radial-gradient(circle at 22% 84%, rgba(23, 191, 169, 0.5), transparent 28%),
+    linear-gradient(132deg, rgba(8, 20, 32, 0.44), rgba(8, 59, 113, 0.32) 45%, rgba(4, 8, 18, 0.54));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(24px) saturate(145%);
+}
+
+.shell::before,
+.shell::after {
+  content: "";
+  position: absolute;
+  inset: auto;
+  pointer-events: none;
+}
+
+.shell::before {
+  width: 78vw;
+  height: 82vh;
+  right: -12vw;
+  top: 3vh;
+  border: 2px solid rgba(109, 215, 227, 0.24);
+  border-radius: 48% 52% 45% 55%;
+  transform: rotate(-27deg);
+}
+
+.shell::after {
+  width: 58vw;
+  height: 48vh;
+  left: 18vw;
+  bottom: -18vh;
+  border: 2px solid rgba(140, 244, 213, 0.16);
+  border-radius: 45% 55% 56% 44%;
+  transform: rotate(18deg);
+}
+
+.titlebar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 60px;
+  padding: 0 4px 12px 6px;
+  -webkit-app-region: drag;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.brand-mark {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.18)),
+    linear-gradient(135deg, #e35d73, #e4bb71 44%, #38b98e 68%, #172a68);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.38);
+}
+
+.brand h1,
+.brand p,
+.panel-head h2,
+.panel-head p,
+.quadrant-card h2,
+.quadrant-card p {
+  margin: 0;
+}
+
+.brand h1 {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.brand p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.window-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 8px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.icon-button.danger:hover {
+  background: rgba(224, 70, 84, 0.74);
+}
+
+.workspace {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(500px, 1.08fr) minmax(430px, 0.92fr);
+  gap: 16px;
+  height: calc(100% - 60px);
+}
+
+.glass-panel,
+.quadrant-card {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 18px 46px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+
+.calendar-panel {
+  display: grid;
+  grid-template-rows: auto auto minmax(340px, 1fr) 104px;
+  min-width: 0;
+  min-height: 0;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(35, 48, 63, 0.38);
+}
+
+.panel-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel-head h2 {
+  margin-top: 4px;
+  font-size: 24px;
+}
+
+.calendar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.calendar-actions button {
+  min-width: 64px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.weekday-row,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.weekday-row {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.calendar-grid {
+  min-height: 0;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.day-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  min-height: 82px;
+  padding: 9px 8px;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  transition: 140ms ease;
+}
+
+.day-cell:hover,
+.day-cell.selected {
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.day-cell.today {
+  box-shadow: inset 0 0 0 2px rgba(255, 106, 128, 0.78);
+}
+
+.day-number {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.other-month .day-number {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.count-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #163047;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.calendar-chip {
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px 7px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #24405a;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.day-agenda {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.day-agenda h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.agenda-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.agenda-chip {
+  max-width: 230px;
+  padding: 6px 9px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.quadrants {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.quadrant-card {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  padding: 17px;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.quadrant-card header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.quadrant-card h2 {
+  margin-top: 4px;
+  font-size: 19px;
+}
+
+.quadrant-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-toggle {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.settings-toggle.active {
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+
+.quadrant-icon {
+  font-size: 28px;
+  font-weight: 800;
+  opacity: 0.88;
+}
+
+.urgent-important {
+  background: linear-gradient(145deg, rgba(201, 84, 100, 0.82), rgba(182, 58, 82, 0.58));
+}
+
+.important {
+  background: linear-gradient(145deg, rgba(222, 180, 105, 0.82), rgba(203, 149, 74, 0.56));
+}
+
+.urgent {
+  background: linear-gradient(145deg, rgba(69, 169, 136, 0.78), rgba(44, 128, 104, 0.58));
+}
+
+.neither {
+  background: linear-gradient(145deg, rgba(21, 43, 109, 0.88), rgba(8, 17, 52, 0.72));
+}
+
+.todo-form {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.todo-form[hidden] {
+  display: none;
+}
+
+.todo-form input,
+.todo-form select {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  border: 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.62);
+  border-radius: 0;
+  outline: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.todo-form input {
+  padding: 0 10px;
+}
+
+.todo-form input::placeholder {
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.todo-form select {
+  padding: 0 8px;
+}
+
+.todo-form option {
+  background: #182433;
+}
+
+.repeat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 7px;
+}
+
+.todo-list {
+  min-height: 0;
+  margin: 0;
+  padding: 0 4px 0 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.todo-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.todo-item {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 5px 0;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.todo-item button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 21px;
+}
+
+.todo-check {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+
+.todo-check:checked {
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 0 0 4px rgba(31, 44, 65, 0.78);
+}
+
+.todo-text {
+  min-width: 0;
+}
+
+.todo-title {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.todo-meta {
+  margin-top: 3px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.todo-item.done .todo-title,
+.todo-item.done .todo-meta {
+  color: rgba(255, 255, 255, 0.42);
+  text-decoration: line-through;
+}
+
+@media (max-width: 1080px) {
+  html,
+  body {
+    min-width: 780px;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.95fr 1fr;
+  }
+
+  .calendar-panel {
+    grid-template-rows: auto auto minmax(250px, 1fr) 88px;
+  }
+
+  .day-cell {
+    min-height: 58px;
+  }
+
+  .calendar-chip:nth-of-type(n + 2) {
+    display: none;
+  }
+}

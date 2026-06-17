@@ -1,0 +1,67 @@
+{
+  "name": "productivity-widgets",
+  "version": "0.1.0",
+  "description": "Windows 11 transparent desktop productivity widgets with calendar and quadrant todos.",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win nsis",
+    "dist:cn": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:ELECTRON_BUILDER_BINARIES_MIRROR='https://npmmirror.com/mirrors/electron-builder-binaries/'; npm run dist\""
+  },
+  "keywords": [
+    "electron",
+    "desktop-widget",
+    "todo",
+    "calendar"
+  ],
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "build": {
+    "appId": "com.scratchtools.productivitywidgets",
+    "productName": "Productivity Widgets",
+    "electronDist": "node_modules/electron/dist",
+    "electronVersion": "31.7.7",
+    "asar": true,
+    "npmRebuild": false,
+    "compression": "maximum",
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Productivity Widgets"
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  }
+}

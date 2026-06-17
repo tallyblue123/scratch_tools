@@ -28,6 +28,7 @@ yarn-error.log*
 # Build output
 dist/
 build/
+**/release/
 *.tsbuildinfo
 
 # Temporary files

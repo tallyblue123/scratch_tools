@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productivity Widgets</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <main class="shell">
+    <header class="titlebar">
+      <section class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <h1>Bigface Kitty Widgets</h1>
+          <p id="todayText"></p>
+        </div>
+      </section>
+      <nav class="window-actions" aria-label="窗口操作">
+        <button id="pinWindow" class="icon-button" title="置顶窗口" aria-label="置顶窗口">⌃</button>
+        <button id="minimizeWindow" class="icon-button" title="最小化" aria-label="最小化">−</button>
+        <button id="closeWindow" class="icon-button danger" title="关闭" aria-label="关闭">×</button>
+      </nav>
+    </header>
+
+    <section class="workspace">
+      <section class="calendar-panel glass-panel">
+        <header class="panel-head">
+          <div>
+            <p class="eyebrow">Calendar</p>
+            <h2 id="monthTitle"></h2>
+          </div>
+          <div class="calendar-actions">
+            <button id="prevMonth">上个月</button>
+            <button id="todayButton">今天</button>
+            <button id="nextMonth">下个月</button>
+          </div>
+        </header>
+        <div class="weekday-row" id="weekdayRow"></div>
+        <div class="calendar-grid" id="calendarGrid" aria-label="月历"></div>
+        <aside class="day-agenda" id="dayAgenda"></aside>
+      </section>
+
+      <section class="quadrants" aria-label="四象限待办">
+        <article class="quadrant-card urgent-important" data-quadrant="urgent-important">
+          <header>
+            <div>
+              <p class="eyebrow">Do First</p>
+              <h2>重要且紧急</h2>
+            </div>
+            <div class="quadrant-actions">
+              <button class="settings-toggle" type="button" title="添加事项设置" aria-label="添加事项设置"
+                aria-expanded="false">⚙</button>
+              <span class="quadrant-icon">↟</span>
+            </div>
+          </header>
+          <form class="todo-form" hidden>
+            <input name="title" placeholder="输入后回车添加新事项" autocomplete="off" required>
+            <div class="repeat-row">
+              <input name="startDate" type="date" aria-label="开始日期" required>
+              <input name="endDate" type="date" aria-label="结束日期">
+              <select name="repeat" aria-label="重复周期">
+                <option value="once">仅开始日</option>
+                <option value="workdays">工作日</option>
+                <option value="weekends">每周末</option>
+                <option value="daily">每日</option>
+              </select>
+            </div>
+          </form>
+          <ul class="todo-list"></ul>
+        </article>
+
+        <article class="quadrant-card important" data-quadrant="important">
+          <header>
+            <div>
+              <p class="eyebrow">Schedule</p>
+              <h2>重要不紧急</h2>
+            </div>
+            <div class="quadrant-actions">
+              <button class="settings-toggle" type="button" title="添加事项设置" aria-label="添加事项设置"
+                aria-expanded="false">⚙</button>
+              <span class="quadrant-icon">⇈</span>
+            </div>
+          </header>
+          <form class="todo-form" hidden>
+            <input name="title" placeholder="输入后回车添加新事项" autocomplete="off" required>
+            <div class="repeat-row">
+              <input name="startDate" type="date" aria-label="开始日期" required>
+              <input name="endDate" type="date" aria-label="结束日期">
+              <select name="repeat" aria-label="重复周期">
+                <option value="once">仅开始日</option>
+                <option value="workdays">工作日</option>
+                <option value="weekends">每周末</option>
+                <option value="daily">每日</option>
+              </select>
+            </div>
+          </form>
+          <ul class="todo-list"></ul>
+        </article>
+
+        <article class="quadrant-card urgent" data-quadrant="urgent">
+          <header>
+            <div>
+              <p class="eyebrow">Delegate</p>
+              <h2>紧急不重要</h2>
+            </div>
+            <div class="quadrant-actions">
+              <button class="settings-toggle" type="button" title="添加事项设置" aria-label="添加事项设置"
+                aria-expanded="false">⚙</button>
+              <span class="quadrant-icon">⇊</span>
+            </div>
+          </header>
+          <form class="todo-form" hidden>
+            <input name="title" placeholder="输入后回车添加新事项" autocomplete="off" required>
+            <div class="repeat-row">
+              <input name="startDate" type="date" aria-label="开始日期" required>
+              <input name="endDate" type="date" aria-label="结束日期">
+              <select name="repeat" aria-label="重复周期">
+                <option value="once">仅开始日</option>
+                <option value="workdays">工作日</option>
+                <option value="weekends">每周末</option>
+                <option value="daily">每日</option>
+              </select>
+            </div>
+          </form>
+          <ul class="todo-list"></ul>
+        </article>
+
+        <article class="quadrant-card neither" data-quadrant="neither">
+          <header>
+            <div>
+              <p class="eyebrow">Reduce</p>
+              <h2>不重要不紧急</h2>
+            </div>
+            <div class="quadrant-actions">
+              <button class="settings-toggle" type="button" title="添加事项设置" aria-label="添加事项设置"
+                aria-expanded="false">⚙</button>
+              <span class="quadrant-icon">⇣</span>
+            </div>
+          </header>
+          <form class="todo-form" hidden>
+            <input name="title" placeholder="输入后回车添加新事项" autocomplete="off" required>
+            <div class="repeat-row">
+              <input name="startDate" type="date" aria-label="开始日期" required>
+              <input name="endDate" type="date" aria-label="结束日期">
+              <select name="repeat" aria-label="重复周期">
+                <option value="once">仅开始日</option>
+                <option value="workdays">工作日</option>
+                <option value="weekends">每周末</option>
+                <option value="daily">每日</option>
+              </select>
+            </div>
+          </form>
+          <ul class="todo-list"></ul>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+
+</html>
