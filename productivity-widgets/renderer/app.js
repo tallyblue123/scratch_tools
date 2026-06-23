@@ -13,6 +13,7 @@
     weekends: '每周末',
     daily: '每日'
   };
+  const tauriInvoke = window.__TAURI__?.core?.invoke || window.__TAURI__?.tauri?.invoke;
 
   const today = stripTime(new Date());
   let visibleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -43,8 +44,8 @@
     document.querySelector('#nextMonth').addEventListener('click', () => changeMonth(1));
     document.querySelector('#todayButton').addEventListener('click', goToday);
     document.querySelector('#pinWindow').addEventListener('click', togglePin);
-    document.querySelector('#minimizeWindow').addEventListener('click', () => window.widgetWindow?.minimize());
-    document.querySelector('#closeWindow').addEventListener('click', () => window.widgetWindow?.close());
+    document.querySelector('#minimizeWindow').addEventListener('click', minimizeWindow);
+    document.querySelector('#closeWindow').addEventListener('click', closeWindow);
 
     document.querySelectorAll('.settings-toggle').forEach((button) => {
       button.addEventListener('click', () => toggleSettings(button));
@@ -90,10 +91,36 @@
   }
 
   async function togglePin() {
-    const isPinned = await window.widgetWindow?.togglePin();
+    const isPinned = await invokeDesktop('window_toggle_pin');
     const button = document.querySelector('#pinWindow');
     button.classList.toggle('active', Boolean(isPinned));
     button.title = isPinned ? '取消置顶' : '置顶窗口';
+  }
+
+  async function minimizeWindow() {
+    await invokeDesktop('window_minimize');
+  }
+
+  async function closeWindow() {
+    await invokeDesktop('window_close');
+  }
+
+  async function invokeDesktop(command, payload) {
+    if (tauriInvoke) {
+      return tauriInvoke(command, payload);
+    }
+
+    if (window.widgetWindow) {
+      const electronCommand = {
+        window_minimize: 'minimize',
+        window_close: 'close',
+        window_toggle_pin: 'togglePin'
+      }[command];
+
+      return window.widgetWindow[electronCommand]?.();
+    }
+
+    return undefined;
   }
 
   function toggleSettings(button) {
@@ -347,6 +374,19 @@
   }
 
   async function loadTodos() {
+    if (tauriInvoke) {
+      try {
+        const result = await invokeDesktop('load_todos');
+        if (result.exists) {
+          const normalized = normalizeTodos(result.todos);
+          await persistIfChanged(result.todos, normalized);
+          return normalized;
+        }
+      } catch (error) {
+        console.error('Failed to load Tauri todo store:', error);
+      }
+    }
+
     if (window.todoStore) {
       try {
         const result = await window.todoStore.load();
@@ -451,6 +491,15 @@
   }
 
   async function saveElectronTodos(nextTodos) {
+    if (tauriInvoke) {
+      try {
+        await invokeDesktop('save_todos', { payload: { todos: nextTodos } });
+      } catch (error) {
+        console.error('Failed to save Tauri todo store:', error);
+      }
+      return;
+    }
+
     if (window.todoStore) {
       try {
         await window.todoStore.save(nextTodos);

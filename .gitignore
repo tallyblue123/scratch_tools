@@ -29,9 +29,14 @@ yarn-error.log*
 dist/
 build/
 **/release/
+**/target/
+**/src-tauri/gen/schemas/
 *.tsbuildinfo
 
 # Temporary files
 .cache/
 .temp/
 *.tmp
+
+# docs
+*/docs/**

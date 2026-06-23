@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Productivity Widgets",
+  "version": "0.1.0",
+  "identifier": "com.scratchtools.productivitywidgets",
+  "build": {
+    "beforeDevCommand": "npm run serve",
+    "beforeBuildCommand": "",
+    "devUrl": "http://127.0.0.1:4173",
+    "frontendDist": "../renderer"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Productivity Widgets",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 980,
+        "minHeight": 640,
+        "center": true,
+        "resizable": true,
+        "decorations": false,
+        "transparent": true,
+        "shadow": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "shortDescription": "Transparent productivity widgets for Windows 11.",
+    "longDescription": "A transparent desktop calendar and four-quadrant todo widget for Windows 11.",
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "displayLanguageSelector": false
+      }
+    }
+  }
+}
