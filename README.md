@@ -17,6 +17,8 @@
 
 一个 Windows 桌面透明小组件，集成月历与四象限待办事项（Eisenhower Matrix），支持重复任务和窗口置顶。基于 Tauri 构建。
 
+![效率工具](./productivity_widgets.png)
+
 ## 许可证
 
 GPLv3
