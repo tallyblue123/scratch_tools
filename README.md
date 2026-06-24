@@ -12,6 +12,11 @@
 
 详细文档请查看 [gen_password_scratch/README.md](./gen_password_scratch/README.md)
 
+
+### [Productivity Widgets](./productivity-widgets/)
+
+一个 Windows 桌面透明小组件，集成月历与四象限待办事项（Eisenhower Matrix），支持重复任务和窗口置顶。基于 Tauri 构建。
+
 ## 许可证
 
 GPLv3
